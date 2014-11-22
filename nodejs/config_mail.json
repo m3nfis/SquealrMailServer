@@ -1,0 +1,23 @@
+{
+	"ports": {
+		"smtp" : 25
+	},
+	"mongo" : {
+		"url" :"mongodb://localhost:27017/squealr",
+		"workCollection" : "emails"
+	},
+	"smtp" : {
+		"debug"  : false,
+		"timeout" : 120000,
+		"requireAuthentication" : false,
+		"enableAuthentication" : false,
+		"ignoreTLS" : true,
+		"disableDNSValidation" : true,
+		"SMTPBanner" : " Squealr, disposable mail server",
+		"name" : "mail.squealr.com"
+	},
+	"sanitizeHtml" : {
+		"schemes" : { "allowedSchemes": [ "data", "http", "https", "ftp", "mailto" ] }
+	}
+
+}

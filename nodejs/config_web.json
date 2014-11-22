@@ -1,0 +1,9 @@
+{
+	"ports": {
+		"http" : 81
+	},
+	"mongo" : {
+		"url" :"mongodb://localhost:27017/squealr",
+		"workCollection" : "emails"
+	}
+}

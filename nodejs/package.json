@@ -1,0 +1,19 @@
+{
+  "name": "squealrMail",
+  "version": "0.0.2",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.4.8",
+    "jade": "*",
+    "socket.io": "~1.0.4",
+    "mongodb": "~1.4.6",
+    "simplesmtp": "~0.3.32",
+    "cheerio": "~0.17.0",
+    "sanitize-html": "~1.1.7",
+    "mailparser": "~0.4.4",
+    "memorystream": "~0.2.0"
+  }
+}
