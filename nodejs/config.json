@@ -1,0 +1,33 @@
+{
+  "ports": {
+    "smtp": 25,
+    "http": 81
+  },
+  "mongo": {
+    "url": "mongodb://squealr:34tgrfbf4fg453r4344ede3f44efef443f@localhost:15535",
+    "workCollection": "emails"
+  },
+  "domain": "mailblanao.space",
+  "smtp": {
+    "debug": false,
+    "timeout": 120000,
+    "requireAuthentication": false,
+    "enableAuthentication": false,
+    "ignoreTLS": true,
+    "disableDNSValidation": true,
+    "SMTPBanner": "mailblanao.space",
+    "name": "mailblanao.space"
+  },
+  "sanitizeHtml": {
+    "allowedTags": [
+      "style","address", "article", "aside", "footer", "header", "h1", "h2", "h3", "h4",
+      "h5", "h6", "hgroup", "main", "nav", "section", "blockquote", "dd", "div",
+      "dl", "dt", "figcaption", "figure", "hr", "li", "main", "ol", "p", "pre",
+      "ul", "a", "abbr", "b", "bdi", "bdo", "br", "cite", "code", "data", "dfn",
+      "em", "i", "kbd", "mark", "q", "rb", "rp", "rt", "rtc", "ruby", "s", "samp",
+      "small", "span", "strong", "sub", "sup", "time", "u", "var", "wbr", "caption",
+      "col", "colgroup", "table", "tbody", "td", "tfoot", "th", "thead", "tr"
+    ],
+    "schemes": { "allowedSchemes": ["data", "http", "https", "ftp", "mailto"] }
+  }
+}

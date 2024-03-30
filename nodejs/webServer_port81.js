@@ -7,20 +7,20 @@ var express = require('express'),
 	MongoClient = mongo.MongoClient,
 	DB, emailColl;
 
-var CONFIG = require('./config_web.json');
+var CONFIG = require('./config.json');
 
-
-MongoClient.connect( CONFIG.mongo.url , function(err, db) {
-	if( err ) {  console.log("MONGO failed to connect to %s", CONFIG.mongo.url); return;}
+const client = new MongoClient(CONFIG.mongo.url);
+client
+  .connect()
+  .then(function (a) {
     console.log("MONGO db connected");
-    DB = db;
-    emailColl = db.collection( CONFIG.mongo.workCollection ,function(err, collection) {
-		if(err) {
-			console.log("Collection " + CONFIG.mongo.workCollection + " missing");
-			console.log(err);
-		}
-	});
-});
+    DB = client.db("squealr");
+    emailColl = DB.collection("emails");
+  })
+  .catch(function(b) {
+	console.log("MONGO failed to connect to %s", CONFIG.mongo.url);
+	console.error(b);
+  });
 
 
 var app = express();
@@ -30,8 +30,10 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
 
-app.get('/inbox/:to',function (req, res) {
+app.get('/inbox/list/:to',async function (req, res) {
+	
 	var toEmail = req.params.to;
+	console.log('toEmail', toEmail);
 	
 	if ( !toEmail ){
 		res.status(404);
@@ -42,28 +44,52 @@ app.get('/inbox/:to',function (req, res) {
 	//res.header("Access-Control-Allow-Origin", origin );
 	//res.header("Access-Control-Allow-Headers", "X-Requested-With");
 
-	DB.collection( CONFIG.mongo.workCollection ).find( {'headers.to' : new RegExp(toEmail, 'i')  }).sort({'date': -1}).toArray(function (err, items) {
-		if(err) {
-			console.log("MONGO failed to find  %s in %s collection", toEmail, CONFIG.mongo.workCollection);
-			console.log(err);
-		}
+	try {
+		var items =  await emailColl.find( {'headers.to.text' : new RegExp(toEmail, 'i')  }).sort({'date': -1}).toArray();
 		res.json(items);
 		res.end();
-	});	
 
+	} catch(err) {
+		console.log("MONGO failed to find  %s in %s collection", toEmail, CONFIG.mongo.workCollection);
+		console.log(err);
+		res.status(400).json([]);
+		res.end();
+	}
 });
 
 app.get('/inbox/html/:id',function (req, res) {
 	var mailId = req.params.id;	
-	DB.collection( CONFIG.mongo.workCollection ).findOne({"_id": new ObjectId(mailId)}, function(err, doc) {
+	emailColl.findOne({"_id": new ObjectId(mailId)}, function(err, doc) {
 		if(err) {
 			console.log("MONGO failed to find  doc with id %s in %s collection", mailId , CONFIG.mongo.workCollection);
 			console.log(err);
+			res.status(400).send('not found');
 		}
 		res.send( doc.html );
 		res.end();
 	});	
 
+} );
+app.delete('/inbox/mail/:id',async function (req, res) {
+	var mailId = req.params.id;	
+
+	if ( !mailId ){
+		res.status(404);
+		res.end();
+		return;
+	}
+
+	try {
+		var result = await emailColl.deleteOne({"_id": new ObjectId(mailId)});
+		res.json(result);
+		res.end();
+
+	} catch(err) {
+		console.log("failed to delete  %s in %s collection", mailId, CONFIG.mongo.workCollection);
+		console.log(err);
+		res.status(400).json([]);
+		res.end();
+	}
 } );
 
 

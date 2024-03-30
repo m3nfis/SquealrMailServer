@@ -6,14 +6,15 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "cheerio": "0.17.0",
     "express": "3.4.8",
     "jade": "*",
-    "socket.io": "~1.0.4",
-    "mongodb": "~1.4.6",
-    "simplesmtp": "~0.3.32",
-    "cheerio": "~0.17.0",
-    "sanitize-html": "~1.1.7",
-    "mailparser": "~0.4.4",
-    "memorystream": "~0.2.0"
+    "mailparser": "3.6.9",
+    "memorystream": "0.2.0",
+    "mongodb": "^6.5.0",
+    "node-rdpjs": "^0.3.0",
+    "sanitize-html": "1.1.7",
+    "simplesmtp": "0.3.35",
+    "socket.io": "1.0.4"
   }
 }
